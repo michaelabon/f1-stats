@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script type="module">
+
+	import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+	// Declare the chart dimensions and margins.
+	const width = 800;
+	const height = 400;
+	const marginTop = 20;
+	const marginRight = 20;
+	const marginBottom = 30;
+	const marginLeft = 40;
+
+	const meetings = [
+		{
+			"circuit_key": 63,
+			"circuit_short_name": "Sakhir",
+			"meeting_key": 1229,
+			"meeting_code": "BRN",
+			"location": "Sakhir",
+			"country_key": 36,
+			"country_code": "BRN",
+			"country_name": "Bahrain",
+			"meeting_name": "Bahrain Grand Prix",
+			"meeting_official_name": "FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2024",
+			"gmt_offset": "03:00:00",
+			"date_start": "2024-02-29T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 149,
+			"circuit_short_name": "Jeddah",
+			"meeting_key": 1230,
+			"meeting_code": "KSA",
+			"location": "Jeddah",
+			"country_key": 153,
+			"country_code": "KSA",
+			"country_name": "Saudi Arabia",
+			"meeting_name": "Saudi Arabian Grand Prix",
+			"meeting_official_name": "FORMULA 1 STC SAUDI ARABIAN GRAND PRIX 2024",
+			"gmt_offset": "03:00:00",
+			"date_start": "2024-03-07T13:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 10,
+			"circuit_short_name": "Melbourne",
+			"meeting_key": 1231,
+			"meeting_code": "AUS",
+			"location": "Melbourne",
+			"country_key": 5,
+			"country_code": "AUS",
+			"country_name": "Australia",
+			"meeting_name": "Australian Grand Prix",
+			"meeting_official_name": "FORMULA 1 ROLEX AUSTRALIAN GRAND PRIX 2024",
+			"gmt_offset": "11:00:00",
+			"date_start": "2024-03-22T01:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 46,
+			"circuit_short_name": "Suzuka",
+			"meeting_key": 1232,
+			"meeting_code": "JPN",
+			"location": "Suzuka",
+			"country_key": 4,
+			"country_code": "JPN",
+			"country_name": "Japan",
+			"meeting_name": "Japanese Grand Prix",
+			"meeting_official_name": "FORMULA 1 MSC CRUISES JAPANESE GRAND PRIX 2024",
+			"gmt_offset": "09:00:00",
+			"date_start": "2024-04-05T02:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 49,
+			"circuit_short_name": "Shanghai",
+			"meeting_key": 1233,
+			"meeting_code": "CHN",
+			"location": "Shanghai",
+			"country_key": 53,
+			"country_code": "CHN",
+			"country_name": "China",
+			"meeting_name": "Chinese Grand Prix",
+			"meeting_official_name": "FORMULA 1 LENOVO CHINESE GRAND PRIX 2024",
+			"gmt_offset": "08:00:00",
+			"date_start": "2024-04-19T03:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 151,
+			"circuit_short_name": "Miami",
+			"meeting_key": 1234,
+			"meeting_code": "USA",
+			"location": "Miami",
+			"country_key": 19,
+			"country_code": "USA",
+			"country_name": "United States",
+			"meeting_name": "Miami Grand Prix",
+			"meeting_official_name": "FORMULA 1 CRYPTO.COM MIAMI GRAND PRIX 2024",
+			"gmt_offset": "-04:00:00",
+			"date_start": "2024-05-03T16:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 6,
+			"circuit_short_name": "Imola",
+			"meeting_key": 1235,
+			"meeting_code": "ITA",
+			"location": "Imola",
+			"country_key": 13,
+			"country_code": "ITA",
+			"country_name": "Italy",
+			"meeting_name": "Emilia Romagna Grand Prix",
+			"meeting_official_name": "FORMULA 1 MSC CRUISES GRAN PREMIO DEL MADE IN ITALY E DELL'EMILIA-ROMAGNA 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-05-17T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 22,
+			"circuit_short_name": "Monte Carlo",
+			"meeting_key": 1236,
+			"meeting_code": "MON",
+			"location": "Monaco",
+			"country_key": 114,
+			"country_code": "MON",
+			"country_name": "Monaco",
+			"meeting_name": "Monaco Grand Prix",
+			"meeting_official_name": "FORMULA 1 GRAND PRIX DE MONACO 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-05-24T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 23,
+			"circuit_short_name": "Montreal",
+			"meeting_key": 1237,
+			"meeting_code": "CAN",
+			"location": "Montréal",
+			"country_key": 46,
+			"country_code": "CAN",
+			"country_name": "Canada",
+			"meeting_name": "Canadian Grand Prix",
+			"meeting_official_name": "FORMULA 1 AWS GRAND PRIX DU CANADA 2024",
+			"gmt_offset": "-04:00:00",
+			"date_start": "2024-06-07T17:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 15,
+			"circuit_short_name": "Catalunya",
+			"meeting_key": 1238,
+			"meeting_code": "ESP",
+			"location": "Barcelona",
+			"country_key": 1,
+			"country_code": "ESP",
+			"country_name": "Spain",
+			"meeting_name": "Spanish Grand Prix",
+			"meeting_official_name": "FORMULA 1 ARAMCO GRAN PREMIO DE ESPAÑA 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-06-21T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 19,
+			"circuit_short_name": "Spielberg",
+			"meeting_key": 1239,
+			"meeting_code": "AUT",
+			"location": "Spielberg",
+			"country_key": 17,
+			"country_code": "AUT",
+			"country_name": "Austria",
+			"meeting_name": "Austrian Grand Prix",
+			"meeting_official_name": "FORMULA 1 QATAR AIRWAYS AUSTRIAN GRAND PRIX 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-06-28T10:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 2,
+			"circuit_short_name": "Silverstone",
+			"meeting_key": 1240,
+			"meeting_code": "GBR",
+			"location": "Silverstone",
+			"country_key": 2,
+			"country_code": "GBR",
+			"country_name": "Great Britain",
+			"meeting_name": "British Grand Prix",
+			"meeting_official_name": "FORMULA 1 QATAR AIRWAYS BRITISH GRAND PRIX 2024",
+			"gmt_offset": "01:00:00",
+			"date_start": "2024-07-05T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 4,
+			"circuit_short_name": "Hungaroring",
+			"meeting_key": 1241,
+			"meeting_code": "HUN",
+			"location": "Budapest",
+			"country_key": 14,
+			"country_code": "HUN",
+			"country_name": "Hungary",
+			"meeting_name": "Hungarian Grand Prix",
+			"meeting_official_name": "FORMULA 1 HUNGARIAN GRAND PRIX 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-07-19T11:30:00+00:00",
+			"year": 2024
+		}, {
+			"circuit_key": 7,
+			"circuit_short_name": "Spa-Francorchamps",
+			"meeting_key": 1242,
+			"meeting_code": "BEL",
+			"location": "Spa-Francorchamps",
+			"country_key": 16,
+			"country_code": "BEL",
+			"country_name": "Belgium",
+			"meeting_name": "Belgian Grand Prix",
+			"meeting_official_name": "FORMULA 1 ROLEX BELGIAN GRAND PRIX 2024",
+			"gmt_offset": "02:00:00",
+			"date_start": "2024-07-26T11:30:00+00:00",
+			"year": 2024
+		}]
+
+
+	const driverStyles = [
+		{
+			"1": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "M VERSTAPPEN",
+				"country_code": "NED",
+				"first_name": "Max",
+				"full_name": "Max VERSTAPPEN",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/1col/image.png",
+				"last_name": "Verstappen",
+				"driver_number": 1,
+				"team_colour": "3671C6",
+				"team_name": "Red Bull Racing",
+				"name_acronym": "VER",
+				"primary_driver": true,
+			},
+			"2": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "L SARGEANT",
+				"country_code": "USA",
+				"first_name": "Logan",
+				"full_name": "Logan SARGEANT",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LOGSAR01_Logan_Sargeant/logsar01.png.transform/1col/image.png",
+				"last_name": "Sargeant",
+				"driver_number": 2,
+				"team_colour": "64C4FF",
+				"team_name": "Williams",
+				"name_acronym": "SAR"
+			},
+			"3": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "D RICCIARDO",
+				"country_code": "AUS",
+				"first_name": "Daniel",
+				"full_name": "Daniel RICCIARDO",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/D/DANRIC01_Daniel_Ricciardo/danric01.png.transform/1col/image.png",
+				"last_name": "Ricciardo",
+				"driver_number": 3,
+				"team_colour": "6692FF",
+				"team_name": "RB",
+				"name_acronym": "RIC"
+			},
+			"4": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "L NORRIS",
+				"country_code": "GBR",
+				"first_name": "Lando",
+				"full_name": "Lando NORRIS",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png.transform/1col/image.png",
+				"last_name": "Norris",
+				"driver_number": 4,
+				"team_colour": "FF8000",
+				"team_name": "McLaren",
+				"name_acronym": "NOR",
+				"primary_driver": true,
+			},
+			"10": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "P GASLY",
+				"country_code": "FRA",
+				"first_name": "Pierre",
+				"full_name": "Pierre GASLY",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/P/PIEGAS01_Pierre_Gasly/piegas01.png.transform/1col/image.png",
+				"last_name": "Gasly",
+				"driver_number": 10,
+				"team_colour": "FF87BC",
+				"team_name": "Alpine",
+				"primary_driver": true,
+				"name_acronym": "GAS"
+			},
+			"11": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "S PEREZ",
+				"country_code": "MEX",
+				"first_name": "Sergio",
+				"full_name": "Sergio PEREZ",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/S/SERPER01_Sergio_Perez/serper01.png.transform/1col/image.png",
+				"last_name": "Perez",
+				"driver_number": 11,
+				"team_colour": "3671C6",
+				"team_name": "Red Bull Racing",
+				"name_acronym": "PER"
+			},
+			"14": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "F ALONSO",
+				"country_code": "ESP",
+				"first_name": "Fernando",
+				"full_name": "Fernando ALONSO",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/F/FERALO01_Fernando_Alonso/feralo01.png.transform/1col/image.png",
+				"last_name": "Alonso",
+				"driver_number": 14,
+				"primary_driver": true,
+				"team_colour": "229971",
+				"team_name": "Aston Martin",
+				"name_acronym": "ALO"
+			},
+			"16": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "C LECLERC",
+				"country_code": "MON",
+				"first_name": "Charles",
+				"full_name": "Charles LECLERC",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png.transform/1col/image.png",
+				"last_name": "Leclerc",
+				"driver_number": 16,
+				"team_colour": "E8002D",
+				"primary_driver": true,
+				"team_name": "Ferrari",
+				"name_acronym": "LEC"
+			},
+			"18": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "L STROLL",
+				"country_code": "CAN",
+				"first_name": "Lance",
+				"full_name": "Lance STROLL",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANSTR01_Lance_Stroll/lanstr01.png.transform/1col/image.png",
+				"last_name": "Stroll",
+				"driver_number": 18,
+				"team_colour": "229971",
+				"team_name": "Aston Martin",
+				"name_acronym": "STR"
+			},
+			"20": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "K MAGNUSSEN",
+				"country_code": "DEN",
+				"first_name": "Kevin",
+				"full_name": "Kevin MAGNUSSEN",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/K/KEVMAG01_Kevin_Magnussen/kevmag01.png.transform/1col/image.png",
+				"last_name": "Magnussen",
+				"driver_number": 20,
+				"team_colour": "B6BABD",
+				"team_name": "Haas F1 Team",
+				"name_acronym": "MAG"
+			},
+			"22": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "Y TSUNODA",
+				"country_code": "JPN",
+				"first_name": "Yuki",
+				"full_name": "Yuki TSUNODA",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/Y/YUKTSU01_Yuki_Tsunoda/yuktsu01.png.transform/1col/image.png",
+				"last_name": "Tsunoda",
+				"driver_number": 22,
+				"team_colour": "6692FF",
+				"primary_driver": true,
+				"team_name": "RB",
+				"name_acronym": "TSU"
+			},
+			"23": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "A ALBON",
+				"country_code": "THA",
+				"first_name": "Alexander",
+				"full_name": "Alexander ALBON",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/A/ALEALB01_Alexander_Albon/alealb01.png.transform/1col/image.png",
+				"last_name": "Albon",
+				"driver_number": 23,
+				"team_colour": "64C4FF",
+				"primary_driver": true,
+				"team_name": "Williams",
+				"name_acronym": "ALB"
+			},
+			"24": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "G ZHOU",
+				"country_code": "CHN",
+				"first_name": "Guanyu",
+				"full_name": "ZHOU Guanyu",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GUAZHO01_Guanyu_Zhou/guazho01.png.transform/1col/image.png",
+				"last_name": "Zhou",
+				"driver_number": 24,
+				"team_colour": "52E252",
+				"team_name": "Kick Sauber",
+				"name_acronym": "ZHO"
+			},
+			"27": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "N HULKENBERG",
+				"country_code": "GER",
+				"first_name": "Nico",
+				"full_name": "Nico HULKENBERG",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/N/NICHUL01_Nico_Hulkenberg/nichul01.png.transform/1col/image.png",
+				"last_name": "Hulkenberg",
+				"driver_number": 27,
+				"team_colour": "B6BABD",
+				"team_name": "Haas F1 Team",
+				"primary_driver": true,
+				"name_acronym": "HUL"
+			},
+			"31": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "E OCON",
+				"country_code": "FRA",
+				"first_name": "Esteban",
+				"full_name": "Esteban OCON",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/E/ESTOCO01_Esteban_Ocon/estoco01.png.transform/1col/image.png",
+				"last_name": "Ocon",
+				"driver_number": 31,
+				"team_colour": "FF87BC",
+				"team_name": "Alpine",
+				"name_acronym": "OCO"
+			},
+			"44": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "L HAMILTON",
+				"country_code": "GBR",
+				"first_name": "Lewis",
+				"full_name": "Lewis HAMILTON",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/1col/image.png",
+				"last_name": "Hamilton",
+				"driver_number": 44,
+				"primary_driver": true,
+				"team_colour": "27F4D2",
+				"team_name": "Mercedes",
+				"name_acronym": "HAM"
+			},
+			"55": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "C SAINZ",
+				"country_code": "ESP",
+				"first_name": "Carlos",
+				"full_name": "Carlos SAINZ",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CARSAI01_Carlos_Sainz/carsai01.png.transform/1col/image.png",
+				"last_name": "Sainz",
+				"driver_number": 55,
+				"team_colour": "E8002D",
+				"team_name": "Ferrari",
+				"name_acronym": "SAI"
+			},
+			"63": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "G RUSSELL",
+				"country_code": "GBR",
+				"first_name": "George",
+				"full_name": "George RUSSELL",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png.transform/1col/image.png",
+				"last_name": "Russell",
+				"driver_number": 63,
+				"team_colour": "27F4D2",
+				"team_name": "Mercedes",
+				"name_acronym": "RUS"
+			},
+			"77": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "V BOTTAS",
+				"country_code": "FIN",
+				"first_name": "Valtteri",
+				"full_name": "Valtteri BOTTAS",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/V/VALBOT01_Valtteri_Bottas/valbot01.png.transform/1col/image.png",
+				"last_name": "Bottas",
+				"driver_number": 77,
+				"team_colour": "52E252",
+				"primary_driver": true,
+				"team_name": "Kick Sauber",
+				"name_acronym": "BOT"
+			},
+			"81": {
+				"session_key": 9472,
+				"meeting_key": 1229,
+				"broadcast_name": "O PIASTRI",
+				"country_code": "AUS",
+				"first_name": "Oscar",
+				"full_name": "Oscar PIASTRI",
+				"headshot_url": "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/O/OSCPIA01_Oscar_Piastri/oscpia01.png.transform/1col/image.png",
+				"last_name": "Piastri",
+				"driver_number": 81,
+				"team_colour": "FF8000",
+				"team_name": "McLaren",
+				"name_acronym": "PIA"
+			}
+		}
+	]
+
+	const race_results = [
+		{
+			meeting_key: 1229,
+			session_key: 9472,
+			circuit_short_name: "Sakhir",
+			classifications: [
+
+
+				{
+					"position": 1,
+					"driver_number": 1,
+					"driver_name": "Max Verstappen",
+					"team_name": "Red Bull Racing Honda RBPT",
+					"laps": 57,
+					"time": "1:31:44.742",
+					"points": 26
+				},
+				{
+					"position": 2,
+					"driver_number": 11,
+					"driver_name": "Sergio Perez",
+					"team_name": "Red Bull Racing Honda RBPT",
+					"laps": 57,
+					"time": "+22.457s",
+					"points": 18
+				},
+				{
+					"position": 3,
+					"driver_number": 55,
+					"driver_name": "Carlos Sainz",
+					"team_name": "Ferrari",
+					"laps": 57,
+					"time": "+25.110s",
+					"points": 15
+				},
+				{
+					"position": 4,
+					"driver_number": 16,
+					"driver_name": "Charles Leclerc",
+					"team_name": "Ferrari",
+					"laps": 57,
+					"time": "+39.669s",
+					"points": 12
+				},
+				{
+					"position": 5,
+					"driver_number": 63,
+					"driver_name": "George Russell",
+					"team_name": "Mercedes",
+					"laps": 57,
+					"time": "+46.788s",
+					"points": 10
+				},
+				{
+					"position": 6,
+					"driver_number": 4,
+					"driver_name": "Lando Norris",
+					"team_name": "McLaren Mercedes",
+					"laps": 57,
+					"time": "+48.458s",
+					"points": 8
+				},
+				{
+					"position": 7,
+					"driver_number": 44,
+					"driver_name": "Lewis Hamilton",
+					"team_name": "Mercedes",
+					"laps": 57,
+					"time": "+50.324s",
+					"points": 6
+				},
+				{
+					"position": 8,
+					"driver_number": 81,
+					"driver_name": "Oscar Piastri",
+					"team_name": "McLaren Mercedes",
+					"laps": 57,
+					"time": "+56.082s",
+					"points": 4
+				},
+				{
+					"position": 9,
+					"driver_number": 14,
+					"driver_name": "Fernando Alonso",
+					"team_name": "Aston Martin Aramco Mercedes",
+					"laps": 57,
+					"time": "+74.887s",
+					"points": 2
+				},
+				{
+					"position": 10,
+					"driver_number": 18,
+					"driver_name": "Lance Stroll",
+					"team_name": "Aston Martin Aramco Mercedes",
+					"laps": 57,
+					"time": "+93.216s",
+					"points": 1
+				},
+				{
+					"position": 11,
+					"driver_number": 24,
+					"driver_name": "Zhou Guanyu",
+					"team_name": "Kick Sauber Ferrari",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 12,
+					"driver_number": 20,
+					"driver_name": "Kevin Magnussen",
+					"team_name": "Haas Ferrari",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 13,
+					"driver_number": 3,
+					"driver_name": "Daniel Ricciardo",
+					"team_name": "RB Honda RBPT",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 14,
+					"driver_number": 22,
+					"driver_name": "Yuki Tsunoda",
+					"team_name": "RB Honda RBPT",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 15,
+					"driver_number": 23,
+					"driver_name": "Alexander Albon",
+					"team_name": "Williams Mercedes",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 16,
+					"driver_number": 27,
+					"driver_name": "Nico Hulkenberg",
+					"team_name": "Haas Ferrari",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 17,
+					"driver_number": 31,
+					"driver_name": "Esteban Ocon",
+					"team_name": "Alpine Renault",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 18,
+					"driver_number": 10,
+					"driver_name": "Pierre Gasly",
+					"team_name": "Alpine Renault",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 19,
+					"driver_number": 77,
+					"driver_name": "Valtteri Bottas",
+					"team_name": "Kick Sauber Ferrari",
+					"laps": 56,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 20,
+					"driver_number": 2,
+					"driver_name": "Logan Sargeant",
+					"team_name": "Williams Mercedes",
+					"laps": 55,
+					"time": "+2 laps",
+					"points": 0
+				},
+
+
+			]
+		},
+		{
+			meeting_key: 1230,
+			session_key: 9480,
+			circuit_short_name: "Jeddah",
+			classifications: [
+				{
+					"position": 1,
+					"driver_number": 1,
+					"driver_name": "Max Verstappen",
+					"team_name": "Red Bull Racing Honda RBPT",
+					"laps": 50,
+					"time": "1:20:43.273",
+					"points": 25
+				},
+				{
+					"position": 2,
+					"driver_number": 11,
+					"driver_name": "Sergio Perez",
+					"team_name": "Red Bull Racing Honda RBPT",
+					"laps": 50,
+					"time": "+13.643s",
+					"points": 18
+				},
+				{
+					"position": 3,
+					"driver_number": 16,
+					"driver_name": "Charles Leclerc",
+					"team_name": "Ferrari",
+					"laps": 50,
+					"time": "+18.639s",
+					"points": 16
+				},
+				{
+					"position": 4,
+					"driver_number": 81,
+					"driver_name": "Oscar Piastri",
+					"team_name": "McLaren Mercedes",
+					"laps": 50,
+					"time": "+32.007s",
+					"points": 12
+				},
+				{
+					"position": 5,
+					"driver_number": 14,
+					"driver_name": "Fernando Alonso",
+					"team_name": "Aston Martin Aramco Mercedes",
+					"laps": 50,
+					"time": "+35.759s",
+					"points": 10
+				},
+				{
+					"position": 6,
+					"driver_number": 63,
+					"driver_name": "George Russell",
+					"team_name": "Mercedes",
+					"laps": 50,
+					"time": "+39.936s",
+					"points": 8
+				},
+				{
+					"position": 7,
+					"driver_number": 38,
+					"driver_name": "Oliver Bearman",
+					"team_name": "Ferrari",
+					"laps": 50,
+					"time": "+42.679s",
+					"points": 6
+				},
+				{
+					"position": 8,
+					"driver_number": 4,
+					"driver_name": "Lando Norris",
+					"team_name": "McLaren Mercedes",
+					"laps": 50,
+					"time": "+45.708s",
+					"points": 4
+				},
+				{
+					"position": 9,
+					"driver_number": 44,
+					"driver_name": "Lewis Hamilton",
+					"team_name": "Mercedes",
+					"laps": 50,
+					"time": "+47.391s",
+					"points": 2
+				},
+				{
+					"position": 10,
+					"driver_number": 27,
+					"driver_name": "Nico Hulkenberg",
+					"team_name": "Haas Ferrari",
+					"laps": 50,
+					"time": "+76.996s",
+					"points": 1
+				},
+				{
+					"position": 11,
+					"driver_number": 23,
+					"driver_name": "Alexander Albon",
+					"team_name": "Williams Mercedes",
+					"laps": 50,
+					"time": "+88.354s",
+					"points": 0
+				},
+				{
+					"position": 12,
+					"driver_number": 20,
+					"driver_name": "Kevin Magnussen",
+					"team_name": "Haas Ferrari",
+					"laps": 50,
+					"time": "+105.737s",
+					"points": 0
+				},
+				{
+					"position": 13,
+					"driver_number": 31,
+					"driver_name": "Esteban Ocon",
+					"team_name": "Alpine Renault",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 14,
+					"driver_number": 2,
+					"driver_name": "Logan Sargeant",
+					"team_name": "Williams Mercedes",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 15,
+					"driver_number": 22,
+					"driver_name": "Yuki Tsunoda",
+					"team_name": "RB Honda RBPT",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 16,
+					"driver_number": 3,
+					"driver_name": "Daniel Ricciardo",
+					"team_name": "RB Honda RBPT",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 17,
+					"driver_number": 77,
+					"driver_name": "Valtteri Bottas",
+					"team_name": "Kick Sauber Ferrari",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 18,
+					"driver_number": 24,
+					"driver_name": "Zhou Guanyu",
+					"team_name": "Kick Sauber Ferrari",
+					"laps": 49,
+					"time": "+1 lap",
+					"points": 0
+				},
+				{
+					"position": 19,
+					"driver_number": 18,
+					"driver_name": "Lance Stroll",
+					"team_name": "Aston Martin Aramco Mercedes",
+					"laps": 5,
+					"time": "DNF",
+					"points": 0
+				},
+				{
+					"position": 20,
+					"driver_number": 10,
+					"driver_name": "Pierre Gasly",
+					"team_name": "Alpine Renault",
+					"laps": 1,
+					"time": "DNF",
+					"points": 0
+				},
+
+
+			],
+		}
+	]
+
+	const data = []
+	race_results.forEach(rr => {
+		rr.classifications.forEach(c => {
+			data.push({driver_number: c.driver_number, circuit_short_name: rr.circuit_short_name, points: c.points})
+		})
+	})
+
+
+	let handler = {
+		get: function (target, name) {
+			return target.hasOwnProperty(name) ? target[name] : 0;
+		}
+	}
+	const emptyObj = {}
+	let pointsPerDriver = new Proxy(emptyObj, handler)
+
+	data.forEach(d => {
+		d.total_points = d.points + pointsPerDriver[d.driver_number]
+		pointsPerDriver[d.driver_number] = d.total_points
+	})
+
+
+	const voronoi = false;
+
+
+	// When the pointer moves, find the closest point, update the interactive tip, and highlight
+	// the corresponding line. Note: we don't actually use Voronoi here, since an exhaustive search
+	// is fast enough.
+	function pointermoved(event) {
+		const [xm, ym] = d3.pointer(event);
+		const i = d3.leastIndex(points, ([x, y]) => Math.hypot(x - xm, y - ym));
+		const [x, y, k] = points[i];
+		path.style("stroke", ({z}) => z === k ? null : "#ddd").filter(({z}) => z === k).raise();
+		dot.attr("transform", `translate(${x},${y})`);
+		dot.select("text").text(k);
+		svg.property("value", data[i]).dispatch("input", {bubbles: true});
+	}
+
+	function pointerentered() {
+		path.style("mix-blend-mode", null).style("stroke", "#ddd");
+		dot.attr("display", null);
+	}
+
+	function pointerleft() {
+		path.style("mix-blend-mode", "multiply").style("stroke", null);
+		dot.attr("display", "none");
+		svg.node().value = null;
+		svg.dispatch("input", {bubbles: true});
+	}
+
+
+	// Declare the x (horizontal position) scale.
+	const x = d3.scalePoint()
+		.domain(meetings.map(d => d.circuit_short_name))
+		.range([marginLeft, width - marginRight]);
+
+	// Declare the y (vertical position) scale.
+	const y = d3.scaleLinear()
+		.domain([0, d3.max(data, d => d.total_points)])
+		.range([height - marginBottom, marginTop]);
+
+	// Create the SVG container.
+	const svg = d3.create("svg")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("viewBox", [0, 0, width, height])
+		.attr("style", "max-width: 100%; height: auto; overflow: visible; font: 10px sans-serif;")
+
+	// Add the x-axis.
+	svg.append("g")
+		.attr("transform", `translate(0,${height - marginBottom})`)
+		.call(d3.axisBottom(x));
+
+	// Add the y-axis.
+	svg.append("g")
+		.attr("transform", `translate(${marginLeft},0)`)
+		.call(d3.axisLeft(y))
+		.call(g => g.select(".domain").remove())
+		.call(voronoi ? () => {
+		} : g => g.selectAll(".tick line").clone()
+			.attr("x2", width - marginLeft - marginRight)
+			.attr("stroke-opacity", 0.1))
+		.call(g => g.append("text")
+			.attr("x", -marginLeft)
+			.attr("y", 10)
+			.attr("fill", "currentColor")
+			.attr("text-anchor", "start")
+			.text("Driver"));
+
+	// Compute the points in pixel space as [x, y, z], where z is the name of the series.
+	const points = data.map((d) => [x(d.circuit_short_name), y(d.total_points), d.driver_number]);
+
+	// An optional Voronoi display (for fun).
+	if (voronoi) svg.append("path")
+		.attr("fill", "none")
+		.attr("stroke", "#ccc")
+		.attr("d", d3.Delaunay
+			.from(points)
+			.voronoi([0, 0, width, height])
+			.render());
+
+
+	// Group the points by series.
+	const groups = d3.rollup(points, v => Object.assign(v, {z: v[0][2]}), d => d[2]);
+
+
+	// Draw the lines.
+	const line = d3.line();
+	const path = svg.append("g")
+		.attr("fill", "none")
+		.attr("stroke", "steelblue")
+		.attr("stroke-width", 1.5)
+		.attr("stroke-linejoin", "round")
+		.attr("stroke-linecap", "round")
+		.selectAll("path")
+		.data(groups.values())
+		.join("path")
+		.style("mix-blend-mode", "multiply")
+		.attr("d", line);
+
+	// Add an invisible layer for the interactive tip.
+	const dot = svg.append("g")
+		.attr("display", "none");
+
+	dot.append("circle")
+		.attr("r", 2.5);
+
+	dot.append("text")
+		.attr("text-anchor", "middle")
+		.attr("y", -8);
+
+	svg
+		.on("pointerenter", pointerentered)
+		.on("pointermove", pointermoved)
+		.on("pointerleave", pointerleft)
+		.on("touchstart", event => event.preventDefault());
+
+
+	// Append the SVG element.
+	container.append(svg.node());
+
+</script>
