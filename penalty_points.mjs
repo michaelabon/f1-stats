@@ -1,5 +1,7 @@
 import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import {add} from "https://cdn.jsdelivr.net/npm/date-fns/add.mjs";
+import {races} from "./data/races.mjs";
 
 const teams = {
     "Ferrari": {color: "E80020"},
@@ -101,186 +103,7 @@ const drivers = {
     }
 }
 
-
-const rawData = [
-
-
-
-    {
-        driver: "Daniel Ricciardo",
-        points: 2,
-        date_added: "2024-04-21",
-        reason: "Overtaking Nico Hulkenburg under safety car at the 2024 Chinese Grand Prix",
-    },
-    {
-        driver: "Daniel Ricciardo",
-        points: 1,
-        date_added: "2024-09-01",
-        reason: "Forcing Nico Hulkenberg off track at the 2024 Italian Grand Prix",
-    },
-
-    {
-        driver: "Esteban Ocon",
-        points: 1,
-        date_added: "2024-05-04",
-        reason: "Unsafe release during the 2024 Miami Grand Prix Sprint",
-    },
-    {
-
-        driver: "Esteban Ocon",
-        points: 2,
-        date_added: "2024-05-26",
-        reason: "Collision with Pierre Gasly during the 2024 Monaco Grand Prix",
-    },
-
-    {
-        driver: "George Russell",
-        points: 2,
-        date_added: "2023-11-19",
-        reason: "Collision with Max Verstappen at the 2023 Las Vegas Grand Prix",
-    },
-
-    {
-        driver: "Valtteri Bottas",
-        points: 2,
-        date_added: "2023-10-29",
-        reason: "Collision with Lance Stroll at the 2023 Mexican Grand Prix",
-    },
-
-    {
-        driver: "Carlos Sainz",
-        points: 1,
-        date_added: "2024-05-05",
-        reason: "causing a collision with Oscar Piastri during the 2024 Miami Grand Prix",
-    },
-
-    {
-        "driver": "Max Verstappen",
-        "points": 2,
-        "date_added": "2023-11-19",
-        "reason": "Collision with George Russell at the 2023 Las Vegas Grand Prix",
-    },
-    {
-        "driver": "Max Verstappen",
-        "points": 2,
-        "date_added": "2024-06-30",
-        "reason": "Collision with Lando Norris at the 2024 Austrian Grand Prix",
-    },
-
-    {
-        "driver": "Nico Hulkenberg",
-        "points": 2,
-        "date_added": "2024-06-30",
-        "reason": "Collision with Fernando Alonso at the 2024 Austrian Grand Prix",
-    },
-    {
-        "driver": "Nico Hulkenberg",
-        "points": 2,
-        "date_added": "2024-09-01",
-        "reason": "Collision with Yuki Tsunoda at the 2024 Italian Grand Prix",
-    },
-
-    {
-        "driver": "Lance Stroll",
-        "points": 3,
-        "date_added": "2023-11-17",
-        "reason": "Overtaking under yellow flags at the 2023 Las Vegas Grand Prix",
-    },
-    {
-        "driver": "Lance Stroll",
-        "points": 2,
-        "date_added": "2024-04-21",
-        "reason": "Collision with Daniel Ricciardo at the 2024 Chinese Grand Prix",
-    },
-
-    {
-        "driver": "Sergio Perez",
-        "points": 1,
-        "date_added": "2023-09-17",
-        "reason": "Causing a collision with Alex Albon at the 2023 Singapore Grand Prix",
-    },
-    {
-        "driver": "Sergio Perez",
-        "points": 2,
-        "date_added": "2023-09-24",
-        "reason": "Overtaking Fernando Alonso under Safety Car conditions at the 2023 Japanese Grand Prix",
-    },
-    {
-        "driver": "Sergio Perez",
-        "points": 2,
-        "date_added": "2023-09-24",
-        "reason": "Causing a collision with Kevin Magnussen at the 2023 Japanese Grand Prix",
-    },
-    {
-        "driver": "Sergio Perez",
-        "points": 2,
-        "date_added": "2023-11-26",
-        "reason": "Causing a collision with Lando Norris at the 2023 Abu Dhabi Grand Prix",
-    },
-    {
-        "driver": "Sergio Perez",
-        "points": 2,
-        "date_added": "2024-03-09",
-        "reason": "Unsafe release during the 2024 Saudi Arabian Grand Prix",
-    },
-
-
-    {
-        "driver": "Fernando Alonso",
-        "points": 3,
-        "date_added": "2024-03-24",
-        "reason": "Potentially dangerous driving against George Russell at the 2024 Australian Grand Prix",
-    },
-    {
-        "driver": "Fernando Alonso",
-        "points": 3,
-        "date_added": "2024-04-20",
-        "reason": "Causing a collision with Carlos Sainz at the 2024 Chinese Grand Prix Sprint",
-    },
-    {
-        "driver": "Fernando Alonso",
-        "points": 2,
-        "date_added": "2024-06-30",
-        "reason": "Collision with Zhou Guanyu at the 2024 Austrian Grand Prix",
-    },
-
-    {
-        "driver": "Kevin Magnussen",
-        "points": 3,
-        "date_added": "2024-03-09",
-        "date_expired": "2024-09-02",
-        "reason": "Causing a collision with Alex Albon during the 2024 Saudi Arabian Grand Prix",
-    },
-    {
-        "driver": "Kevin Magnussen",
-        "points": 2,
-        "date_added": "2024-04-21",
-        "date_expired": "2024-09-02",
-        "reason": "Causing a collision with Yuji Tsunoda at the 2024 Chinese Grand Prix",
-    }
-    ,
-    {
-        "driver": "Kevin Magnussen",
-        "points": 3,
-        "date_added": "2024-05-04",
-        "date_expired": "2024-09-02",
-        "reason": "Leaving the track and gaining an advantage on multiple occasions during the 2024 Miami Grand Prix Sprint",
-    },
-    {
-        "driver": "Kevin Magnussen",
-        "points": 2,
-        "date_added": "2024-05-05",
-        "date_expired": "2024-09-02",
-        "reason": "Causing a collision with Logan Sargent during the 2024 Miami Grand Prix",
-    },
-    {
-        "driver": "Kevin Magnussen",
-        "points": 2,
-        "date_added": "2024-09-01",
-        "date_expired": "2024-09-02",
-        "reason": "Causing a collision with Pierre Gasly during the 2024 Italian Grand Prix",
-    }
-]
+const rawData = await d3.csv("penalty_points.csv", d3.autoType)
 
 // verify that each driver in rawData exists in drivers
 for (const d of rawData) {
@@ -320,13 +143,18 @@ for (const d of relativeData) {
 }
 
 
+
+const numDays = 370
+let minX = add(new Date(), {days: -numDays});
+let maxX = add(new Date(), {days: numDays});
+
 const plot = Plot.plot({
     title: "Penalty points for Formula 1 drivers",
     width: 1200,
     marginTop: 70,
+    marginBottom: 120,
     x: {
-        // only show +/- 1 year from today
-        domain: [add(new Date(), {days: -370}), add(new Date(), {days: 370})],
+        domain: [minX, maxX], // only show +/- 1 year from today
         grid: true,
     },
     y: {
@@ -342,7 +170,7 @@ const plot = Plot.plot({
             y: "points",
             z: "driver",
             stroke: "color",
-            marker: true,
+            marker: "tick",
             strokeDasharray: "6",
             channels: {reason: "reason"},
         }),
@@ -350,13 +178,14 @@ const plot = Plot.plot({
             x: "date",
             y: "points",
             z: "driver",
-            marker: true,
+            marker: "circle",
             stroke: "color",
         }),
         Plot.text(data, Plot.selectMaxY({
             x: "date",
             y: "points",
             z: "driver",
+            filter: (d) => d.date > minX,
             text: "driver",
             textAnchor: "start",
             dy: -10,
@@ -366,6 +195,15 @@ const plot = Plot.plot({
             stroke: "red",
             strokeWidth: 2,
         }),
+        Plot.text(races, {
+            x: "date_start",
+            y: 0,
+            filter: (d) => new Date(d.date_start) > minX,
+            text: "country_name",
+            textAnchor: "end",
+            dy: 30,
+            rotate: -60,
+        })
     ],
 })
 

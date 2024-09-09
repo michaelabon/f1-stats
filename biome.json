@@ -13,5 +13,8 @@
 		"formatter": {
 			"semicolons": "asNeeded"
 		}
+	},
+	"files": {
+		"include": ["**/*.mjs", "**/*.js"]
 	}
 }
