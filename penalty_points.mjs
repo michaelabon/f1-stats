@@ -14,7 +14,7 @@ const teams = {
     "Kick Sauber": {color: "52E252"},
 }
 
-let drivers = {
+const drivers = {
     "Pierre Gasly": {
         "team": "Alpine",
         "color": "#0093cc"
@@ -283,11 +283,11 @@ const rawData = [
 ]
 
 // verify that each driver in rawData exists in drivers
-rawData.forEach(d => {
+for (const d of rawData) {
     if (!drivers[d.driver]) {
         alert(`Driver ${d.driver} not found in drivers`)
     }
-})
+}
 
 // Every entry adds points to a driver, and removes the same number of points a year later
 // The default expiry date is one year after the entry date
@@ -310,14 +310,14 @@ const relativeData = rawData.flatMap(d => ([
 
 // Calculate the total points for each driver at each date
 const pointsPerDriver = {}
-rawData.forEach(d => {
+for (const d of rawData) {
     pointsPerDriver[d.driver] = 0
-})
-let data = []
-relativeData.forEach(d => {
+}
+const data = []
+for (const d of relativeData) {
     pointsPerDriver[d.driver] += d.points
     data.push({...d, points: pointsPerDriver[d.driver]})
-})
+}
 
 
 const plot = Plot.plot({
