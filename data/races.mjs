@@ -1,4 +1,84 @@
-let previousRaces = await fetch("https://api.openf1.org/v1/meetings?date_start%3E=2023-01-01").then(r => r.json())
+const races2023 = [
+	{ date_start: "2023-03-03T11:30:00+00:00", country_name: "Bahrain" },
+	{ date_start: "2023-03-17T13:30:00+00:00", country_name: "Saudi Arabia" },
+	{ date_start: "2023-03-31T01:30:00+00:00", country_name: "Australia" },
+	{ date_start: "2023-04-28T09:30:00+00:00", country_name: "Azerbaijan" },
+	{ date_start: "2023-05-05T18:00:00+00:00", country_name: "Miami" },
+	{ date_start: "2023-05-26T11:30:00+00:00", country_name: "Monaco" },
+	{ date_start: "2023-06-02T11:30:00+00:00", country_name: "Spain" },
+	{ date_start: "2023-06-16T17:30:00+00:00", country_name: "Canada" },
+	{ date_start: "2023-06-30T15:00:00+00:00", country_name: "Austria" },
+	{ date_start: "2023-07-07T11:30:00+00:00", country_name: "Great Britain" },
+	{ date_start: "2023-07-21T11:30:00+00:00", country_name: "Hungary" },
+	{ date_start: "2023-07-28T11:30:00+00:00", country_name: "Belgium" },
+	{ date_start: "2023-08-25T10:30:00+00:00", country_name: "Netherlands" },
+	{ date_start: "2023-09-01T11:30:00+00:00", country_name: "Italy" },
+	{ date_start: "2023-09-15T09:30:00+00:00", country_name: "Singapore" },
+	{ date_start: "2023-09-22T02:30:00+00:00", country_name: "Japan" },
+	{ date_start: "2023-10-06T13:30:00+00:00", country_name: "Qatar" },
+	{ date_start: "2023-10-20T17:30:00+00:00", country_name: "Austin" },
+	{ date_start: "2023-10-27T18:30:00+00:00", country_name: "Mexico" },
+	{ date_start: "2023-11-03T14:30:00+00:00", country_name: "Brazil" },
+	{ date_start: "2023-11-17T04:30:00+00:00", country_name: "Las Vegas" },
+	{ date_start: "2023-11-24T09:30:00+00:00", country_name: "Abu Dhabi" },
+]
 
+const races2024 = [
+	{ date_start: "2024-02-29T11:30:00+00:00", country_name: "Bahrain" },
+	{ date_start: "2024-03-07T13:30:00+00:00", country_name: "Saudi Arabia" },
+	{ date_start: "2024-03-22T01:30:00+00:00", country_name: "Australia" },
+	{ date_start: "2024-04-05T02:30:00+00:00", country_name: "Japan" },
+	{ date_start: "2024-04-19T03:30:00+00:00", country_name: "China" },
+	{ date_start: "2024-05-03T16:30:00+00:00", country_name: "Miami" },
+	{ date_start: "2024-05-17T11:30:00+00:00", country_name: "Emilia Romagna" },
+	{ date_start: "2024-05-24T11:30:00+00:00", country_name: "Monaco" },
+	{ date_start: "2024-06-07T17:30:00+00:00", country_name: "Canada" },
+	{ date_start: "2024-06-21T11:30:00+00:00", country_name: "Spain" },
+	{ date_start: "2024-06-28T10:30:00+00:00", country_name: "Austria" },
+	{ date_start: "2024-07-05T11:30:00+00:00", country_name: "Great Britain" },
+	{ date_start: "2024-07-19T11:30:00+00:00", country_name: "Hungary" },
+	{ date_start: "2024-07-26T11:30:00+00:00", country_name: "Belgium" },
+	{ date_start: "2024-08-23T10:30:00+00:00", country_name: "Netherlands" },
+	{ date_start: "2024-08-30T11:30:00+00:00", country_name: "Italy" },
+	{ date_start: "2024-09-15T06:00:00-05:00", country_name: "Azerbaijan" },
+	{ date_start: "2024-09-22T07:00:00-05:00", country_name: "Singapore" },
+	{ date_start: "2024-10-20T14:00:00-05:00", country_name: "Austin" },
+	{ date_start: "2024-10-27T14:00:00-05:00", country_name: "Mexico" },
+	{ date_start: "2024-11-03T11:00:00-06:00", country_name: "Brazil" },
+	{ date_start: "2024-11-24T00:00:00-06:00", country_name: "Las Vegas" },
+	{ date_start: "2024-12-01T10:00:00-06:00", country_name: "Qatar" },
+	{ date_start: "2024-12-08T07:00:00-06:00", country_name: "Abu Dhabi" },
+]
 
-export {previousRaces as races}
+// the times for 2025 are arbitrary as of 2024-09-10
+const races2025 = [
+	{ date_start: "2025-03-16T15:00:00Z", country_name: "Australia" },
+	{ date_start: "2025-03-23T15:00:00Z", country_name: "China" },
+	{ date_start: "2025-04-06T15:00:00Z", country_name: "Japan" },
+	{ date_start: "2025-04-13T15:00:00Z", country_name: "Bahrain" },
+	{ date_start: "2025-04-20T15:00:00Z", country_name: "Saudi Arabia" },
+	{ date_start: "2025-05-04T15:00:00Z", country_name: "Miami" },
+	{ date_start: "2025-05-18T15:00:00Z", country_name: "Emilia Romagna" },
+	{ date_start: "2025-05-25T15:00:00Z", country_name: "Monaco" },
+	{ date_start: "2025-06-01T15:00:00Z", country_name: "Spain" },
+	{ date_start: "2025-06-15T15:00:00Z", country_name: "Canada" },
+	{ date_start: "2025-06-29T15:00:00Z", country_name: "Austria" },
+	{ date_start: "2025-07-06T15:00:00Z", country_name: "United Kingdom" },
+	{ date_start: "2025-07-27T15:00:00Z", country_name: "Belgium" },
+	{ date_start: "2025-08-03T15:00:00Z", country_name: "Hungary" },
+	{ date_start: "2025-08-31T15:00:00Z", country_name: "Netherlands" },
+	{ date_start: "2025-09-07T15:00:00Z", country_name: "Monza" },
+	{ date_start: "2025-09-21T15:00:00Z", country_name: "Azerbaijan" },
+	{ date_start: "2025-10-05T15:00:00Z", country_name: "Singapore" },
+	{ date_start: "2025-10-19T15:00:00Z", country_name: "USA" },
+	{ date_start: "2025-10-26T15:00:00Z", country_name: "Mexico" },
+	{ date_start: "2025-11-09T15:00:00Z", country_name: "Brazil" },
+	{ date_start: "2025-11-22T15:00:00Z", country_name: "Las Vegas" },
+	{ date_start: "2025-11-30T15:00:00Z", country_name: "Qatar" },
+	{ date_start: "2025-12-07T15:00:00Z", country_name: "Abu Dhabi" },
+]
+
+// concatenate the array variables
+const races = [].concat(races2023, races2024, races2025)
+
+export { races }

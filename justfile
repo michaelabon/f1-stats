@@ -1,2 +1,2 @@
 lint:
-  npx @biomejs/biome lint --write .
+  npx @biomejs/biome check --write .
