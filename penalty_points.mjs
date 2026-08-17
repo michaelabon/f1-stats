@@ -25,7 +25,7 @@ const drivers = {
 	"Esteban Ocon": {
 		team: "Alpine",
 		color: "#0093cc",
-		dashed: true,
+		dashed: "second",
 	},
 	"Charles Leclerc": {
 		team: "Ferrari",
@@ -34,7 +34,7 @@ const drivers = {
 	"Carlos Sainz": {
 		team: "Ferrari",
 		color: "#E80020",
-		dashed: true,
+		dashed: "second",
 	},
 	"Max Verstappen": {
 		team: "Red Bull Racing",
@@ -43,7 +43,7 @@ const drivers = {
 	"Sergio Perez": {
 		team: "Red Bull Racing",
 		color: "#3671C6",
-		dashed: true,
+		dashed: "second",
 	},
 	"Alexander Albon": {
 		team: "Williams",
@@ -52,7 +52,12 @@ const drivers = {
 	"Logan Sargeant": {
 		team: "Williams",
 		color: "#64C4FF",
-		dashed: true,
+		dashed: "second",
+	},
+	"Franco Colapinto": {
+		team: "Williams",
+		color: "#64C4FF",
+		dashed: "third",
 	},
 	"Yuki Tsunoda": {
 		team: "RB",
@@ -61,7 +66,7 @@ const drivers = {
 	"Daniel Ricciardo": {
 		team: "RB",
 		color: "#6692FF",
-		dashed: true,
+		dashed: "second",
 	},
 	"Fernando Alonso": {
 		team: "Aston Martin",
@@ -70,7 +75,7 @@ const drivers = {
 	"Lance Stroll": {
 		team: "Aston Martin",
 		color: "#229971",
-		dashed: true,
+		dashed: "second",
 	},
 	"Valtteri Bottas": {
 		team: "Kick Sauber",
@@ -79,7 +84,7 @@ const drivers = {
 	"Guanyu Zhou": {
 		team: "Kick Sauber",
 		color: "#52E252",
-		dashed: true,
+		dashed: "second",
 	},
 	"Nico Hulkenberg": {
 		team: "Haas",
@@ -88,7 +93,7 @@ const drivers = {
 	"Kevin Magnussen": {
 		team: "Haas",
 		color: "#B6BABD",
-		dashed: true,
+		dashed: "second",
 	},
 	"Lewis Hamilton": {
 		team: "Mercedes",
@@ -97,7 +102,7 @@ const drivers = {
 	"George Russell": {
 		team: "Mercedes",
 		color: "#6CD3BF",
-		dashed: true,
+		dashed: "second",
 	},
 	"Lando Norris": {
 		team: "McLaren",
@@ -106,7 +111,7 @@ const drivers = {
 	"Oscar Piastri": {
 		team: "McLaren",
 		color: "#FF8000",
-		dashed: true,
+		dashed: "second",
 	},
 }
 
@@ -190,7 +195,7 @@ const plot = Plot.plot({
 			{
 				...defaultDriverOptions,
 				marker: "tick",
-				strokeDasharray: "6",
+				strokeDasharray: "2 8 2",
 			},
 		),
 		Plot.lineY(
